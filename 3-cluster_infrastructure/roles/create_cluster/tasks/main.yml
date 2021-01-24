@@ -1,0 +1,41 @@
+- name: Get values from Terraform output to file
+  shell: cd tf && terraform output -json >> ../roles/create_cluster/templates/values
+
+- name: Include TF outputs to ansible
+  include_vars: "{{ playbook_dir }}/roles/create_cluster/templates/values"
+
+- name: Run kops toolbox
+  shell: "kops toolbox template --name {{ kubernetes_cluster_name.value }} --values {{ playbook_dir }}/roles/create_cluster/templates/values --template {{ playbook_dir }}/roles/create_cluster/templates/cluster.yml --format-yaml > {{ playbook_dir }}/cluster_files/cluster.yaml"
+
+- name: Import kops state definition yaml to S3
+  shell: "kops replace -f {{ playbook_dir }}/cluster_files/cluster.yaml --state {{ kops_s3_bucket.value }} --name {{ kubernetes_cluster_name.value }} --force"
+
+- name: Generate TF of cluster configuration
+  shell: "kops update cluster --target terraform --state {{ kops_s3_bucket.value }} --name {{ kubernetes_cluster_name.value }} --out {{ playbook_dir }}/cluster_files"
+
+- name: Generate a SSH key for cluster safety (you should change this)
+  shell: "kops create secret --name {{ kubernetes_cluster_name.value }} --state {{ kops_s3_bucket.value }} --name {{ kubernetes_cluster_name.value }} sshpublickey admin -i ~/.ssh/id_rsa.pub"
+
+- name: Creating an empty file for Terraform plan
+  file:
+    path: "{{ playbook_dir }}/cluster_files/tfplan"
+    state: touch
+
+- name: Terraform init and plan
+  terraform:
+    project_path: '{{ playbook_dir }}/cluster_files'
+    state: planned
+    force_init: yes
+    plan_file: "{{ playbook_dir }}/cluster_files/tfplan"
+    backend_config:
+      bucket: "{{ kops_s3_bucket.value }}"
+      region: "{{ region }}"
+
+- name: Terraform apply
+  terraform:
+    project_path: '{{ playbook_dir }}/cluster_files'
+    state: present
+    plan_file: "{{ playbook_dir }}/cluster_files/tfplan"
+    backend_config:
+      bucket: "{{ kops_s3_bucket.value }}"
+      region: "{{ region }}"
