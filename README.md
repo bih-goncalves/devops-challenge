@@ -2,14 +2,13 @@
 
 <div align="center">
 
-[![Status](https://img.shields.ßio/badge/status-active-success.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 ac
 </div>
 
 ---
 
-<p align="center"> This repository presents the infrastructure configuration for a simple API deployed in kubernetes.
+<p align="center"> This repository presents the infrastructure configuration for a simple API deployed with kubernetes.
     <br>
 </p>
 
@@ -28,7 +27,7 @@ ac
 The application is a rest API that evaluates whether a number is odd or not.
 Built with NodeJS and hosted on a Kops cluster (kubernetes). Using IaC patterns, the infrastructure was written with a mix of tools to launch better and be maintainable.
 
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/images/cluster.png?raw=true)
+![alt text](/images/cluster.png?raw=true)
 
 ## 🏁 Getting started <a name = "getting_started"></a>
 
