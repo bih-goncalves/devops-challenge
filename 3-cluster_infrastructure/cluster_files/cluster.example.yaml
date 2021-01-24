@@ -1,0 +1,81 @@
+apiVersion: kops/v1alpha2
+kind: Cluster
+metadata:
+  name: KUBERNETES_CLUSTER_NAME
+spec:
+  api:
+    loadBalancer:
+      additionalSecurityGroups:
+      - K8S_COMMON_HTTP
+      type: Public
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudProvider: aws
+  configBase: s3://KOPS_STATE_BUCKET/KUBERNETES_CLUSTER_NAME
+  etcdClusters:
+  - etcdMembers:
+    - instanceGroup: master-AZ
+      name: AZ
+    name: main
+  - etcdMembers:
+    - instanceGroup: master-AZ
+      name: AZ
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubernetesVersion: 1.10.6
+  masterPublicName: api.KUBERNETES_CLUSTER_NAME
+  networkCIDR: CIDR_BLOCK
+  networkID: VPC_ID
+  networking:
+    canal: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  subnets:
+  - id: PUBLIC_SUBNET
+    name: utility-AZ
+    type: Utility
+    zone: AZ
+  - egress: NATGW_ID
+    id: PRIVATE_SUBNET
+    name: AZ
+    type: Private
+    zone: AZ
+  topology:
+    dns:
+      type: Public
+    masters: private
+    nodes: private
+---
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: KUBERNETES_CLUSTER_NAME
+  name: master-AZ
+spec:
+  image: kope.io/k8s-1.10-debian-stretch-amd64-hvm-ebs-2018-08-17
+  kubernetesVersion: 1.10.6
+  machineType: t2.medium
+  maxSize: 1
+  minSize: 1
+  role: Master
+  subnets:
+  - AZ
+---
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  labels:
+    kops.k8s.io/cluster: KUBERNETES_CLUSTER_NAME
+  name: nodes
+spec:
+  image: kope.io/k8s-1.10-debian-stretch-amd64-hvm-ebs-2018-08-17
+  kubernetesVersion: 1.10.6
+  machineType: t2.small
+  maxSize: 2
+  minSize: 2
+  role: Node
+  subnets:
+  - AZ

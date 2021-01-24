@@ -1,0 +1,44 @@
+{
+ "region" :{ "value" : "REGION"
+},
+
+"vpc_id" :{ "value" : "VPC_ID"
+},
+
+"vpc_name" :{ "value" : "VPC_NAME"
+},
+
+"vpc_cidr_block" :{ "value" : "CIDR_BLOCK"
+},
+
+"public_subnet_ids" :{ "value" : ["PUBLIC_SUBNET"]
+},
+
+"public_route_table_ids" :{ "value" : ["PUBLIC_ROUTE_TABLE"]
+},
+
+"private_subnet_ids" :{ "value" : ["PRIVATE_SUBNET"]
+},
+
+"private_route_table_ids" :{ "value" : ["PRIVATE_ROUTE_TABLE"]
+},
+
+"default_security_group_id" :{ "value" : "SECURITY_GROUP_ID"
+},
+
+"nat_gateway_ids" :{ "value" : ["NATGW_ID"]
+},
+
+"availability_zones" :{ "value" : ["AZ"]
+},
+
+"common_http_sg_id" :{ "value" : "K8S_COMMON_HTTP"
+},
+
+"kops_s3_bucket" :{ "value" : "KOPS_STATE_BUCKET"
+},
+
+"kubernetes_cluster_name" :{ "value" : "KUBERNETES_CLUSTER_NAME"
+}
+
+}
