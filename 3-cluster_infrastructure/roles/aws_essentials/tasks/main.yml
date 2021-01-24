@@ -1,0 +1,26 @@
+# Basic deploy of a service
+- name: Creating an empty file for Terraform plan
+  file:
+    path: "{{ playbook_dir }}/tf/tfplan"
+    state: touch
+
+- name: Terraform init and plan
+  terraform:
+    project_path: '{{ playbook_dir }}/tf'
+    state: planned
+    force_init: yes
+    plan_file: "{{ playbook_dir }}/tf/tfplan"
+    backend_config:
+      bucket: "{{ bucket_name }}"
+      region: "{{ region }}"
+      key: "iac/terraform.tfstate"
+
+- name: Terraform apply
+  terraform:
+    project_path: '{{ playbook_dir }}/tf'
+    state: present
+    plan_file: "{{ playbook_dir }}/tf/tfplan"
+    backend_config:
+      bucket: "{{ bucket_name }}"
+      region: "{{ region }}"
+      key: "iac/terraform.tfstate"
