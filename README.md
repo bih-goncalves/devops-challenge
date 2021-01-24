@@ -28,7 +28,7 @@ ac
 The application is a rest API that evaluates whether a number is odd or not.
 Built with NodeJS and hosted on a Kops cluster (kubernetes). Using IaC patterns, the infrastructure was written with a mix of tools to launch better and be maintainable.
 
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![alt text](https://github.com/[username]/[reponame]/blob/[branch]/images/cluster.png?raw=true)
 
 ## 🏁 Getting started <a name = "getting_started"></a>
 
