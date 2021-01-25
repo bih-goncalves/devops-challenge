@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ms-{{ $.Values.app_name }}
+  labels:
+    name: ms-{{ $.Values.app_name }}
+    project: {{ $.Values.app_name }}
