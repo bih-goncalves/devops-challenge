@@ -5,8 +5,17 @@
 Generate k8s manifest:
 
 ```
+# inside simple-ms folder
 helm dep up
 helm template release --values values.yaml ./ --debug
+```
+
+Deploy with Helm:
+
+```
+helm install --values simple-ms/values.yaml simple-ms
+helm upgrade <release> simple-ms
+helm rollback <release> <revision>
 ```
 
 ## Config
