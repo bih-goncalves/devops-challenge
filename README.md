@@ -68,11 +68,12 @@ These steps are essential, but not immutable. You can customize some of them or 
 ### Routes
 
 ```
+/ - root path, just says that you should try a number
+
 /:integer - Checks if the number is odd or not
 - output
 
-/list/:list - Checks a list of numbers
-- output
+/health - health check for k8s
 ```
 
 ## ⛏️ Tools <a name = "built_using"></a>
