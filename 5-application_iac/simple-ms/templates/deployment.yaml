@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app_name }}-api
+  namespace: ms-{{ .Values.app_name }}
+  labels:
+    app: {{ .Values.app_name }}-api
+    namespace: ms-{{ .Values.app_name }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app_name }}-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 20%
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ .Values.app_name }}-api
+        namespace: ms-{{ .Values.app_name }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.container.containerPort }}
+              protocol: TCP
+          {{- if .Values.container.args }}
+          args: [ {{ .Values.container.args | quote }} ]
+          {{- end }}
+          env:
+          - name: APP_NAME
+            value: {{ .Values.app_name }}
+          - name: APP_STAGE
+            value: {{ .Values.app_stage | default "CLOUD" }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.container.healthCheck | default "/" }}
+              port: http
+            initialDelaySeconds: {{ .Values.container.livenessProbe | default "10" }}
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 10
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.container.healthCheck | default "/" }}
+              port: http
+            initialDelaySeconds: {{ .Values.container.readinessProbe | default "10" }}
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 10
+            timeoutSeconds: 10
+          resources:
+            limits:
+              {{- if .Values.resources.limits_cpu }}
+              cpu: {{ .Values.resources.limits_cpu }}
+              {{- end }}
+              memory: {{ .Values.resources.limits_memory | default "256Mi" }}
+            requests:
+              cpu: {{ .Values.resources.requests_cpu | default "100m" }}
+              memory: {{ .Values.resources.requests_memory | default "128Mi" }}
