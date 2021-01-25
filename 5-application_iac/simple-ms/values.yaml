@@ -1,0 +1,60 @@
+################################################
+# Project: Helm Chart for microservices        #
+# Name: simple-ms                              #
+# Company: ----------                          #
+# Team: Support Engineering                    #
+# ENVIRONMENT: DEV                             #
+################################################
+
+app_name: is-odd
+
+replicaCount: 2
+
+image:
+  repository: byby267/isodd
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+container:
+  containerPort: 3000
+  healthCheck: /health
+  livenessProbe: 15
+  readinessProbe: 15
+
+resources:
+  limits_cpu: 100m
+  limits_memory: 128Mi
+  requests_cpu: 100m
+  requests_memory: 128Mi
+
+# you can use HPA operator here
+podAnnotations: {}
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 3000
+
+# if you want to enable this
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+  # targetMemoryUtilizationPercentage: 80
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
