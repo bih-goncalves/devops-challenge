@@ -3,7 +3,7 @@
 <div align="center">
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
-ac
+
 </div>
 
 ---
@@ -39,6 +39,7 @@ Some of the steps can be different. The whole project was divided into modules t
 Ansible 2.10.4+
 AWS credentials
 Helm v3.4.0+
+Kops
 Kubernetes cluster (optional)
 Python 3
 Terraform 0.14.0+
@@ -49,21 +50,34 @@ Terraform 0.14.0+
 These steps are essential, but not immutable. You can customize some of them or just replace them, but you need to run them all to get the same result.
 
 #### Step 1 - Application itself
-\
-#### Step 2 - CI pipeline
-\
-#### Step 3 - Cluster infrastructure
-\
-#### Step 4 - CD pipeline
-\
-#### Step 5 - Application IaC
-\
 
+This is a copy from https://github.com/bih-goncalves/is-odd repo.
+The original repo was created to link with CI pipeline and trigger it.
+
+#### Step 2 - CI pipeline
+
+This is the step where we create Drone CI server and start the CI pipeline configurations. We are using the official helm chart and changing some configurations.
+
+The CI itself is not provided yet, it's the next step for this challenge.
+
+#### Step 3 - Cluster infrastructure
+
+In this step we create all infrastructure. If you already have the VPC, subnets configuration or the cluster itself, you can skip some steps.
+
+#### Step 4 - CD pipeline
+
+WIP
+
+#### Step 5 - Application IaC
+
+Here we provide the application helm charts to be applied by CD pipeline with Drone.
 
 
 ## 🎈 Usage <a name="usage"></a>
 
+You can make a GET request for any of the following routes and get a simple JSON message.
 
+When you check the number, the response is a JSON with the result as true or false.
 
 ### Routes
 
@@ -72,8 +86,11 @@ These steps are essential, but not immutable. You can customize some of them or 
 
 /:integer - Checks if the number is odd or not
 - output
+{ result: true }
 
 /health - health check for k8s
+- output
+{ message: 'I am fine'}
 ```
 
 ## ⛏️ Tools <a name = "built_using"></a>
