@@ -54,15 +54,15 @@ These steps are essential, but not immutable. You can customize some of them or 
 This is a copy from https://github.com/bih-goncalves/is-odd repo.
 The original repo was created to link with CI pipeline and trigger it.
 
-#### Step 2 - CI pipeline
+#### Step 2 - Cluster infrastructure
+
+In this step we create all infrastructure. If you already have the VPC, subnets configuration or the cluster itself, you can skip some steps.
+
+#### Step 3 - CI pipeline
 
 This is the step where we create Drone CI server and start the CI pipeline configurations. We are using the official helm chart and changing some configurations.
 
 The CI itself is not provided yet, it's the next step for this challenge.
-
-#### Step 3 - Cluster infrastructure
-
-In this step we create all infrastructure. If you already have the VPC, subnets configuration or the cluster itself, you can skip some steps.
 
 #### Step 4 - CD pipeline
 
